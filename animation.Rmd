@@ -1,0 +1,70 @@
+---
+title: "Animation"
+author: "Karen Jiang"
+date: "3/31/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(ggplot2)
+library(gganimate)
+theme_set(theme_bw())
+```
+
+```{r}
+library(gapminder)
+head(gapminder)
+```
+
+## Static Graph
+```{r}
+
+p <- ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, size = pop, colour = country)) +
+  geom_point(show.legend = FALSE, alpha = 0.7) +
+  scale_color_viridis_d() + 
+  scale_size(range = c(2,12)) +
+  scale_x_log10() +
+  labs(
+    x = "GDP per capita",
+    y = "Life Expectancy"
+  )
+p
+```
+## Transition by Year
+
+```{r}
+p + transition_time(year) +
+  labs(title = "Year: {frame_time}")
+```
+
+## Facet by Continent, Transition by Year
+
+```{r}
+p + facet_wrap(~ continent) +
+  transition_time(year) + 
+  labs(title = "Year: {frame_time}")
+
+```
+
+## Gradual Fall Off with Shadow Wake
+
+```{r}
+p + facet_wrap(~ continent) +
+  transition_time(year) + 
+  labs(title = "Year: {frame_time}") + 
+  shadow_wake(wake_length = 0.1, alpha = FALSE)
+
+```
+
+## Show Original as Background
+
+```{r}
+p + transition_time(year) +
+  labs(title = "Year: {frame_time}") +
+  shadow_mark(alpha = 0.3, size = 0.5)
+```
+
+
+
